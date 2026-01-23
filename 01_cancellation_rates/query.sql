@@ -72,7 +72,7 @@ FROM
             USER_ID AS PROBLEMATIC_USER  -- USER_ID ya está particionado
     PATTERN ( A B C D ) DEFINE
         A AS A.ACTION = 'start',
-        B AS B.ACTION = 'cancel'
+        B AS B.ACTION = 'cancel',
         C AS C.ACTION = 'start',
         D AS D.ACTION = 'cancel'
     ) ITS;
