@@ -1,4 +1,4 @@
-> TABLE **USERS_01** for client-serving oriented RDBMS
+> TABLE **USERS_01** for client-server oriented RDBMS
 
 | USER_ID | ACTION | DATES |
 |------------|------------|------------|
