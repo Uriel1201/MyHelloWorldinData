@@ -75,4 +75,4 @@ FROM
         B AS B.ACTION = 'cancel'
         C AS C.ACTION = 'start',
         D AS D.ACTION = 'cancel'
-    ) ITS
+    ) ITS;
