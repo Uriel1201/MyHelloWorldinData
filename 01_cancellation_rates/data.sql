@@ -6,7 +6,7 @@ actions, and dates, write a query to
 return the publication and cancellation
 rate for each user. */
 
-/* ORACLE. */
+/* ORACLE 26ai */
 /********************************************************************/
 CREATE TABLE USERS_01 (
     USER_ID INTEGER,
