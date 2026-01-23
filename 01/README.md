@@ -1,4 +1,4 @@
-> # Users Table
+> ### Users Table
 
 | USER_ID | ACTION | DATES |
 |------------|------------|------------|
