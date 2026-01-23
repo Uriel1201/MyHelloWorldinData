@@ -1,4 +1,4 @@
-> TABLE **USERS_01** IN OLTP
+> TABLE **USERS_01** for client-serving oriented RDBMS
 
 | USER_ID | ACTION | DATES |
 |------------|------------|------------|
