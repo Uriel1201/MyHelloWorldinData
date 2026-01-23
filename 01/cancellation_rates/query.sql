@@ -1,9 +1,7 @@
 /* 
 01. Cancellation Rates.
 
-From the following table of user IDs,
-actions, and dates, write a query to
-return the publication and cancellation
+Write a query to return the publication and cancellation
 rate for each user. */
 
 /* ORACLE 23ai. */
