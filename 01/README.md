@@ -1,4 +1,4 @@
-> TABLE **USERS_01** IN Relational DataBase Management System
+> TABLE **USERS_01** IN OLTP
 
 | USER_ID | ACTION | DATES |
 |------------|------------|------------|
