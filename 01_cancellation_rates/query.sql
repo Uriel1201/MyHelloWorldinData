@@ -69,7 +69,8 @@ FROM
         ORDER BY
             DATES
         MEASURES
-            USER_ID AS PROBLEMATIC_USER  -- USER_ID ya está particionado
+            USER_ID AS PROBLEMATIC_USER
+        ONE ROW PER MATCH
     PATTERN ( A B C D ) DEFINE
         A AS A.ACTION = 'start',
         B AS B.ACTION = 'cancel',
