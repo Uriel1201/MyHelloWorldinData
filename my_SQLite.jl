@@ -51,7 +51,9 @@ function users_01(db::SQLite.DB)
                 (3, "start", "05-jan-20"),
                 (3, "cancel", "06-jan-20" ),
                 (1, "start", "07-jan-20"),
-                (1, "publish", "08-jan-20")]
+                (1, "publish", "08-jan-20"),
+                (3, "start", "09-jan-20"),
+                (3, "cancel", "10-jan-20")]
 
         placeholders = join(["(?, ?, ?)" for _ in rows], ", ")
         query = "INSERT INTO USERS_01 (USER_ID, ACTION, DATES) VALUES $placeholders"
