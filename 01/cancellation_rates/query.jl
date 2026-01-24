@@ -1,4 +1,4 @@
-const DB_PATH = "my_SQLite.db"
+const DB_PATH = "MyDataBase.db"
 using .MyDataBase, DataFrames, Arrow, SQLite, DuckDB, .SQLiteArrowKit, PrettyTables 
 
 MyDataBase.main() #This line saves the database 'mySQLite.db to disk
