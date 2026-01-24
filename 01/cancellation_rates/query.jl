@@ -66,7 +66,7 @@ function main(args = ARGS)
             """
             duck_result = DBInterface.execute(duck, query)
             println("\n**DuckDB**\nQuerying publication and cancellation rates for each user:")
-            print_DuckTable(duck_result)
+            pretty_table(duck_result)
 
             users = arrow_users |> DataFrame
             dummy = select(users,
