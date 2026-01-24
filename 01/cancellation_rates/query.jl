@@ -1,17 +1,17 @@
-#=
-01. Cancellation Rates.
-
-Write a query to return the publication and cancellation
-rate for each user. 
-=#
-
 const DB_PATH = "my_SQLite.db"
 using .MyDataBase, DataFrames, Arrow, SQLite, DuckDB, .SQLiteArrowKit, PrettyTables 
 
 MyDataBase.main() #This line saves the database 'mySQLite.db to disk
+
 #=
 **********************************************
+01. Cancellation Rates.
+
+Write a query to return the publication and cancellation
+rate for each user.
+**********************************************
 =#
+
 function main(args = ARGS)
 
     db = SQLite.DB(DB_PATH)
@@ -99,9 +99,11 @@ function main(args = ARGS)
     end
 
 end
+
 #=
 **********************************************
 =#
+
 if Base.@isdefined(PROGRAM_FILE) &&
    abspath(PROGRAM_FILE) == abspath(@__FILE__)
 
