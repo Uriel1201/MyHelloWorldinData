@@ -1,3 +1,4 @@
+## Scheme.
 > Table **USERS_01** in client-server RDBMS (Oracle 23ai)
 
 | USER_ID | ACTION | DATES |
