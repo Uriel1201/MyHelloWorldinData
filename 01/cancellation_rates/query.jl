@@ -1,3 +1,10 @@
+#=
+01. Cancellation Rates.
+
+Write a query to return the publication and cancellation
+rate for each user. 
+=#
+
 const DB_PATH = "my_SQLite.db"
 using .MyDataBase, DataFrames, Arrow, SQLite, DuckDB, .SQLiteArrowKit, PrettyTables 
 
