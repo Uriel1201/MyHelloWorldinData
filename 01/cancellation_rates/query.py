@@ -1,7 +1,7 @@
 import adbc_driver_sqlite.dbapi as dbapi
 import polars as pol
 import pyarrow as pa
-import arrowkit
+import ArrowKit
 
 """
 01. Cancellation Rates.
