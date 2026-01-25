@@ -9,4 +9,4 @@
 
 | USER_ID | ACTION | DATES |
 |------------|------------|------------|
-|  Int32 | String | String |
+|  Int32 or Int64 | String | String |
