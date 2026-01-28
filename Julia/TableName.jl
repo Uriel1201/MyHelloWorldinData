@@ -2,13 +2,11 @@ module TableName
 
 export table_name
 
+#****************************************************************
 #
-#
-
+#****************************************************************
 function table_name(filename::AbstractString)::String
 
-    name = uppercase(table)
-  
     query = open(filename) do file
         read(file, String)
     end
