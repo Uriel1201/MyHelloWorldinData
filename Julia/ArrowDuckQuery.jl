@@ -8,7 +8,7 @@ module ArrowDuckQuery
     #*  get_ArrowDuckQuery:
     #** params:
     #****************************************************************
-    function get_ArrowDuckQuery(filename::AbstractString)::String
+    function get_ArrowDuckQuery(ArrowFilename::AbstractString, Query:String)::String
 
     end
     #****************************************************************
