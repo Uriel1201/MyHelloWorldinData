@@ -3,7 +3,8 @@ module TableName
     export table_name
 
     #****************************************************************
-    #*** table_name: 
+    #*  table_name:
+    #** filename:
     #****************************************************************
     function table_name(filename::AbstractString)::String
 
