@@ -1,18 +1,20 @@
 module TableName
 
-export table_name
+    export table_name
 
-#****************************************************************
-#
-#****************************************************************
-function table_name(filename::AbstractString)::String
+    #****************************************************************
+    #*** table_name: 
+    #****************************************************************
+    function table_name(filename::AbstractString)::String
 
-    query = open(filename) do file
-        read(file, String)
-    end
+        query = open(filename) do file
+            read(file, String)
+        end
   
-    table_name = match(r"FROM\s+'(\w+)'", query).captures[1]
+        table_name = match(r"FROM\s+'(\w+)'", query).captures[1]
 
-    return table_name
+        return table_name
+
+    end
 
 end
