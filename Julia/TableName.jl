@@ -1,12 +1,12 @@
 module TableName
 
-    export table_name
+    export get_table_name
 
     #****************************************************************
     #*  table_name:
     #** filename:
     #****************************************************************
-    function table_name(filename::AbstractString)::String
+    function get_table_name(filename::AbstractString)::String
 
         query = open(filename) do file
             read(file, String)
