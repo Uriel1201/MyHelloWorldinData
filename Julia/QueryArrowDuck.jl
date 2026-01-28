@@ -1,1 +1,2 @@
-
+module QueryArrowDuck
+end
