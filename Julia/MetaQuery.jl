@@ -1,4 +1,4 @@
-module QueryMeta
+module MetaQuery
 
     export get_query, get_table_name
     #****************************************************************
