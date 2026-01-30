@@ -8,14 +8,9 @@ module Users01
     #*  get_CancellationRates:
     #** params:
     #****************************************************************
-    function get_CancellationRates(ArrowFilename::AbstractString)::DataFrame
+    function get_CancellationRates(ArrowTable::Arrow.Table)::DataFrame
 
-        if !isfile(ArrowFilename)
-            throw(ArgumentError("'$ArrowFilename' does not exist"))
-        end
-   
-        arrow_table = Arrow.Table(ArrowFilename)
-        df = DataFrame(arrow_table, copycols = false)
+        df = DataFrame(ArrowTable, copycols = false)
         dummy = select(df,
                        :USER_ID,
                        [:ACTION => ByRow(isequal(v)) => Symbol(v) for v in unique(df.ACTION)]
