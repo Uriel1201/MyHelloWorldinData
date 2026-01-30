@@ -16,4 +16,4 @@ WITH
       FROM
           TOTALS
       ORDER BY 
-          1;1
+          1;
