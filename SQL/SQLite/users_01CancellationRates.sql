@@ -1,3 +1,13 @@
+/* 
+01. Cancellation Rates.
+
+From the following table of user IDs,
+actions, and dates, write a query to
+return the publication and cancellation
+rate for each user. */
+
+/* SQLITE. */
+/********************************************************************/
 WITH
     TOTALS AS (
         SELECT
