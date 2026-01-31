@@ -1,5 +1,6 @@
 import adbc_driver_sqlite.dbapi as dbapi
 import pyarrow as pa
+
 #============================================================
 def is_available(conn:dbapi.AdbcSqliteConnection, table:str) -> bool:
 
@@ -9,6 +10,7 @@ def is_available(conn:dbapi.AdbcSqliteConnection, table:str) -> bool:
     names = [item["table_name"] for item in tables]
 
     return name in names
+    
 #============================================================
 def get_ArrowTable(conn:dbapi.AdbcSqliteConnection, table:str) -> pa.Table:
 
