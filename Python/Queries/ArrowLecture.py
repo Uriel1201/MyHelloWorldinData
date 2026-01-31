@@ -1,7 +1,10 @@
 import adbc_driver_sqlite.dbapi as dbapi
 import pyarrow as pa
 
-#============================================================
+# ============================================================
+# is_available:
+# params:
+# ============================================================
 def is_available(conn:dbapi.AdbcSqliteConnection, table:str) -> bool:
 
     name = table.upper()
@@ -11,7 +14,10 @@ def is_available(conn:dbapi.AdbcSqliteConnection, table:str) -> bool:
 
     return name in names
     
-#============================================================
+# ============================================================
+# get_ArrowTable:
+# params:
+# ============================================================
 def get_ArrowTable(conn:dbapi.AdbcSqliteConnection, table:str) -> pa.Table:
 
     try:
@@ -30,4 +36,4 @@ def get_ArrowTable(conn:dbapi.AdbcSqliteConnection, table:str) -> pa.Table:
 
     except Exception as e:
 
-        print(f'CORRUPTED QUERY OR TABLE NOT AVAILABLE IN DATABASE: {e}')
+        print(f'Corrupted query or table not available: {e}')
