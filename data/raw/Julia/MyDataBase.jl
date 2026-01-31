@@ -1,6 +1,6 @@
 module MyDataBase
 
-using SQLite, Tables, Main.SQLiteArrowKit
+using SQLite, Tables
 
 #=
 **********************************************
@@ -46,9 +46,24 @@ end
 **********************************************
 =#
 
+function is_available(db::SQLite.DB, table::String)::Bool
+
+    name = uppercase(table)
+    list_tables = collect(SQLite.tables(db))
+    names = [t.name for t in list_tables]
+
+    return name in names
+
+end
+
+#=
+**********************************************
+**********************************************
+=#
+
 function users_01(db::SQLite.DB)
 
-    if !SQLiteArrowKit.is_available(db, "users_01")
+    if !is_available(db, "users_01")
 
         schema = Tables.Schema((:USER_ID, :ACTION, :DATES), (Int32, String, String))
         SQLite.createtable!(db, "USERS_01", schema, temp = false)
@@ -89,7 +104,7 @@ end
 
 function transactions_02(db::SQLite.DB)
 
-    if !SQLiteArrowKit.is_available(db, "transactions_02")
+    if !is_available(db, "transactions_02")
         schema = Tables.Schema((:SENDER, :RECEIVER, :AMOUNT, :TRANSACTION_DATE), (Int32, Int32, Float64, String))
         SQLite.createtable!(db, "TRANSACTIONS_02" , schema, temp = false)
 
@@ -126,7 +141,7 @@ end
 
 function items_03(db::SQLite.DB)
 
-    if !SQLiteArrowKit.is_available(db, "items_03")
+    if  !is_available(db, "items_03")
         schema = Tables.Schema((:DATES, :ITEM), (String, String))
         SQLite.createtable!(db, "ITEMS_03" , schema, temp = false)
 
@@ -172,7 +187,7 @@ end
 
 function users_04(db::SQLite.DB)
 
-    if !SQLiteArrowKit.is_available(db, "users_04")
+    if  !is_available(db, "users_04")
         schema = Tables.Schema((:ID, :ACTIONS, :ACTION_DATE), (Int32, String, String))
         SQLite.createtable!(db, "USERS_04" , schema, temp = false)
 
@@ -233,7 +248,7 @@ end
 
 function users_05(db::SQLite.DB)
 
-    if !SQLiteArrowKit.is_available(db, "users_05")
+    if  !is_available(db, "users_05")
         schema = Tables.Schema((:USER_ID, :PRODUCT_ID, :TRANSACTION_DATE), (Int32, Int32, String))
         SQLite.createtable!(db, "USERS_05" , schema, temp = false)
 
