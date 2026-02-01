@@ -23,10 +23,10 @@ def get_Query(filename: str) -> str:
 # ============================================================
 def get_TableName(query: str) -> str:
 
-    match := re.search(r"FROM\s+(\w+)", query))
-    
-    if not match:
+    if (match := re.search(r"FROM\s+(\w+)", query)):
+
+        return match.group(1)
+
+    else:
         
-        raise ValueError(f'Unable to locate the 
-                           table name in your SQL query') 
-    return match.group(1)
+        raise ValueError(f'Unable to locate the table name in your SQL query')
