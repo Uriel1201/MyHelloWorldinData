@@ -24,3 +24,5 @@ def get_query(filename: str) -> str:
 def get_TableName(query: str) -> str:
 
     m = match.group(1) if (match := re.search(r"FROM\s+(\w+)", query)) else None
+
+    return m
