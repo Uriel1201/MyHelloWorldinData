@@ -37,29 +37,27 @@ def get_ArrowTable(conn:dbapi.AdbcSqliteConnection, table:str) -> pa.Table:
     except Exception as e:
 
         print(f'Corrupted query or table not available: {e}')
-    #****************************************************************
-    #*  get_query:
-    #** params:
-    #****************************************************************
-    function get_query(filename::AbstractString)::String
-        
-        if !isfile(filename)
-            throw(ArgumentError("'$filename' does not exist"))
-        end
 
-        query = open(filename) do file
-            read(file, String)
-        end
-
-        return query
-    
     end
-    #****************************************************************
+
+# ============================================================
+# get_query:
+# params:
+# ============================================================
+def get_query(filename: str) -> str:
+
+    try:
+        
+        with open(filename, 'r', encoding='utf-8') as file:
+            
+            return file.read()
+            
+    except FileNotFoundError:
+        
+        return f"Error:'{filename}' does not exist in directory."
+# ============================================================
+
     
-    #****************************************************************
-    #*  get_table_name:
-    #** params:
-    #****************************************************************
     function get_table_name(query::String)::String
 
         m = match(r"FROM\s+'(\w+)'", query).captures[1]
