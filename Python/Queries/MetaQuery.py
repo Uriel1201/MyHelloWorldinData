@@ -4,7 +4,7 @@ import re
 # get_Query:
 # params:
 # ============================================================
-def get_query(filename: str) -> str:
+def get_Query(filename: str) -> str:
 
     try:
         
