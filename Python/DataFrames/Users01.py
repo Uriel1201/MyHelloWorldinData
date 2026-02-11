@@ -1,6 +1,10 @@
 import polars as pl
 import pyarrow as pa
 
+# ============================================================
+# get_CancellationRates:
+# params:
+# ============================================================
 def get_CancellationRates(table:pa.Table) -> pl.DataFrame:
 
     pl_rates = (pl.from_arrow(table)
