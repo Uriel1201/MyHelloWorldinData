@@ -9,13 +9,6 @@ rate for each user. */
 /* DUCKDB. */
 /********************************************************************/
 WITH
-    DUCK_UPDATED AS (
-        SELECT
-            USER_ID,
-            ACTION,
-            STRFTIME(STRPTIME(DATES, '%d-%b-%y'), '%Y-%m-%d')::DATE AS DATES
-        FROM
-            'USERS_01'),
     TOTALS AS (
         SELECT
             USER_ID,
@@ -23,9 +16,10 @@ WITH
             SUM(IF(ACTION = 'cancel',1,0)) AS TOTAL_CANCELS,
             SUM(IF(ACTION = 'publish',1,0)) AS TOTAL_PUBLISHES
         FROM
-            DUCK_UPDATED
+            'USERS_01'
         GROUP BY
-            USER_ID)
+            USER_ID
+    )
 SELECT
     USER_ID,
     ROUND(TOTAL_PUBLISHES / NULLIF(TOTAL_STARTS,
