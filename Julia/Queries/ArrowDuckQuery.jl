@@ -2,13 +2,13 @@ module ArrowDuckQuery
 
     using ..MetaQuery, Arrow, DuckDB
 
-    export get_duck_query
+    export get_arrow_query
 
     #****************************************************************
     #*  get_duck_query:
     #** params:
     #****************************************************************
-    function get_duck_query(duck::DuckDB.DB, table::Arrow.Table, DuckQueryFilename::AbstractString)::DuckDB.QueryResult
+    function get_arrow_query(duck::DuckDB.DB, table::Arrow.Table, DuckQueryFilename::AbstractString)::DuckDB.QueryResult
         
         query = get_query(DuckQueryFilename)
         name = table_name(query)
