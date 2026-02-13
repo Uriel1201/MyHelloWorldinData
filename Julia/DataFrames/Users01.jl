@@ -14,17 +14,9 @@ module Users01
 
         return combine(groupby(df, :USER_ID)) do sdf
 
-                   starts = 0
-                   cancels = 0
-                   publishes = 0
-
-                   for a in sdf.ACTION
-
-                       starts += a == "start"
-                       cancels += a == "cancel"
-                       publishes += a == "publish"
-
-                   end
+                   starts    = count(==("start"),   sdf.ACTION) 
+                   cancels   = count(==("cancel"),  sdf.ACTION)  
+                   publishes = count(==("publish"), sdf.ACTION)
 
                    (CANCEL_RATE = starts > 0 ? cancels / starts : missing,
                     PUBLISH_RATE = starts > 0 ? publishes/ starts : missing
