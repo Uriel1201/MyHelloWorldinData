@@ -2,6 +2,7 @@ module MetaQuery
 
     export get_query, table_name
 
+
     """
         get_query(filename::AbstractString) -> String
 
@@ -20,7 +21,8 @@ module MetaQuery
         return query
     
     end
-    
+
+
     """
         table_name(query::String) -> String
 
