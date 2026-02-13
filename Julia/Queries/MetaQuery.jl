@@ -1,14 +1,14 @@
 module MetaQuery
 
-    export get_Query, get_TableName
+    export get_query, table_name
     #****************************************************************
     #*  get_Query:
     #** params:
     #****************************************************************
-    function get_Query(filename::AbstractString)::String
+    function get_query(filename::AbstractString)::String
         
         if !isfile(filename)
-            throw(ArgumentError("'$filename' does not exist"))
+            throw(ArgumentError("file '$filename' not found"))
         end
 
         query = open(filename) do file
@@ -24,7 +24,7 @@ module MetaQuery
     #*  get_TableName:
     #** params:
     #****************************************************************
-    function get_TableName(query::String)::String
+    function table_name(query::String)::String
 
         m = match(r"FROM\s+'(\w+)'", query).captures[1]
     
