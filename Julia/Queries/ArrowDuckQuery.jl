@@ -4,6 +4,7 @@ module ArrowDuckQuery
 
     export get_arrow_query
 
+
     """
         get_arrow_query(duck::DuckDB.DB, table::Arrow.Table, DuckQueryFilename::AbstractString) -> DuckDB.QueryResult
 
