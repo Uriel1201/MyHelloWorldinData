@@ -8,26 +8,29 @@ module Users01
     #*  cancellation_rates:
     #** params:
     #****************************************************************
-    function cancellation_rates(table::Arrow.Table)::DataFrame
+    function cancellation_rates(Table::Arrow.Table)::DataFrame
 
-        df = DataFrame(table, copycols = false)
-        dummy = select(df,
-                       :USER_ID,
-                       [:ACTION => ByRow(isequal(v)) => Symbol(v) for v in unique(df.ACTION)]
-                )
+        df = DataFrame(Table, copycols = false)
 
-        result = combine(groupby(dummy,
-                                 :USER_ID
-                         ),
-                         names(dummy,
-                               Not(:USER_ID)
-                         ) .=> sum
-                 )
+        return combine(groupby(df, :USER_ID)) do sdf
 
-        result.CANCEL_RATE = @.ifelse(result.start_sum != 0, result.cancel_sum ./ result.start_sum, NaN)
-        result.PUBLISH_RATE = @.ifelse(result.start_sum != 0, result.publish_sum ./ result.start_sum, NaN)
+                   starts = 0
+                   cancels = 0
+                   publishes = 0
 
-        return result 
+                   for a in sdf.ACTION
+
+                       starts += a == "start"
+                       cancels += a == "cancel"
+                       publishes += a == "publish"
+
+                   end
+
+                   (CANCEL_RATE = starts > 0 ? cancels / starts : missing,
+                    PUBLISH_RATE = starts > 0 ? publishes/ starts : missing
+                   )
+
+               end
 
     end
     #****************************************************************
