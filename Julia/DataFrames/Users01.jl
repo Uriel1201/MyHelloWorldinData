@@ -8,9 +8,9 @@ module Users01
     """
         cancellation_rates(table::Arrow.Table) -> DataFrame
 
-    Calcula para cada usuario las tasas de cancelación y publicación:
-    - `CANCEL_RATE`  = (#cancel / #start) o `missing` si no hay starts.
-    - `PUBLISH_RATE` = (#publish / #start) o `missing` si no hay starts.
+    Computes per-user cancellation and publicationrates:
+    - `CANCEL_RATE`  = (#cancellations / #starts) or `missing` if don't exist starts.
+    - `PUBLISH_RATE` = (#publishes / #starts) or `missing` if don't exist starts.
     """
     function cancellation_rates(Table::Arrow.Table)::DataFrame
 
