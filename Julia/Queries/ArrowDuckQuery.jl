@@ -7,7 +7,7 @@ module ArrowDuckQuery
     """
         get_arrow_query(duck::DuckDB.DB, table::Arrow.Table, DuckQueryFilename::AbstractString) -> DuckDB.QueryResult
 
-    Returns the SQL query from an SQL file as a String:
+    Returns the result of a query using the DuckDB analytical query engine:
     """
     function get_arrow_query(duck::DuckDB.DB, table::Arrow.Table, DuckQueryFilename::AbstractString)::DuckDB.QueryResult
         
