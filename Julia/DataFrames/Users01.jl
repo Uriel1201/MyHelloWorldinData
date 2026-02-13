@@ -6,15 +6,15 @@ module Users01
 
     
     """
-        cancellation_rates(table::Arrow.Table) -> DataFrame
+        cancellation_rates(users_01::Arrow.Table) -> DataFrame
 
     Computes per user cancellation and publication rates:
     - `CANCEL_RATE`  = (#cancels / #starts) or `missing` if there are no starts.
     - `PUBLISH_RATE` = (#publishes / #starts) or `missing` if there are no starts.
     """
-    function cancellation_rates(Table::Arrow.Table)::DataFrame
+    function cancellation_rates(users_01::Arrow.Table)::DataFrame
 
-        df = DataFrame(Table, copycols = false)
+        df = DataFrame(users_01, copycols = false)
 
         return combine(groupby(df, :USER_ID)) do sdf
 
