@@ -2,15 +2,15 @@ module Users01
 
     using DataFrames, Arrow
 
-    export get_CancellationRates
+    export cancellation_rates
 
     #****************************************************************
-    #*  get_CancellationRates:
+    #*  cancellation_rates:
     #** params:
     #****************************************************************
-    function get_CancellationRates(ArrowTable::Arrow.Table)::DataFrame
+    function cancellation_rates(table::Arrow.Table)::DataFrame
 
-        df = DataFrame(ArrowTable, copycols = false)
+        df = DataFrame(table, copycols = false)
         dummy = select(df,
                        :USER_ID,
                        [:ACTION => ByRow(isequal(v)) => Symbol(v) for v in unique(df.ACTION)]
