@@ -6,7 +6,7 @@ WITH DUCKTABLE AS (
         ACTION,
         STRFTIME(STRPTIME(DATES, '%d-%b-%y'), '%Y-%m-%d')::DATE AS DATES
     FROM
-        'USERS_01')
+        sqlite_scan('MyDataBase.db', 'USERS_01')
 SELECT 
     *
 FROM
