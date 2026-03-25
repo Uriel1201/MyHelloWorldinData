@@ -32,7 +32,7 @@ module MetaQuery
 
         m = match(r"FROM\s+'(\w+)'", query).captures[1]
     
-        if m === nothing
+        if m == nothing
             throw(ArgumentError("""Unable to locate the 
                                    table name in your SQL query 
                                 """
@@ -43,6 +43,5 @@ module MetaQuery
         return m
 
     end
-    #****************************************************************
-
+    
 end
