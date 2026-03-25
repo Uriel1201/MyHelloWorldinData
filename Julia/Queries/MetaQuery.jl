@@ -9,7 +9,7 @@ module MetaQuery
     Returns the SQL query from an SQL file as a String:
     """
     function get_query(filename::AbstractString)::String
-        
+
         if !isfile(filename)
             throw(ArgumentError("file '$filename' not found"))
         end
@@ -19,7 +19,7 @@ module MetaQuery
         end
 
         return query
-    
+
     end
 
 
@@ -30,18 +30,23 @@ module MetaQuery
     """
     function table_name(query::String)::String
 
-        m = match(r"FROM\s+'(\w+)'", query).captures[1]
-    
-        if m == nothing
-            throw(ArgumentError("""Unable to locate the 
-                                   table name in your SQL query 
-                                """
-                  )
-            )
+        m = match(r"sqlite_scan\s*\([^,]+,\s*'(\w+)'"i, query)
+        if m !== nothing
+            return m.captures[1]
         end
     
-        return m
+        m = match(r"FROM\s+'(\w+)'"i, query)
+        if m !== nothing
+            return m.captures[1]
+        end
+    
+        m = match(r"FROM\s+(\w+)(?!\()"i, query)
+        if m !== nothing
+            return m.captures[1]
+        end
+
+        return nothing
 
     end
-    
+
 end
