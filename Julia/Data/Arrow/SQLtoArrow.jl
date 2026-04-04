@@ -24,12 +24,19 @@ module SQLtoArrow
     function sqlite_to_arrow(query::String, output::String)::Nothing
 
         duck = DBInterface.connect(DuckDB.DB, ":memory:")
-        DBInterface.execute(duck, "LOAD sqlite")
-        cursor = DBInterface.execute(duck, query)
-        Arrow.write(output, cursor)
-        DBInterface.close!(duck)
 
-        return nothing
+        try
+            DBInterface.execute(duck, "LOAD sqlite")
+            cursor = DBInterface.execute(duck, query)
+            Arrow.write(output, cursor)
+        
+        finally 
+            DBInterface.close!(duck)
+
+        end
+
+        return 
+            nothing
 
     end
 
