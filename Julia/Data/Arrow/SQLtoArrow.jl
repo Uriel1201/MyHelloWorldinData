@@ -1,8 +1,27 @@
 module SQLtoArrow
 
-    using Arrow, SQLite, DuckDB, ..MetaQuery
+    using Arrow, DuckDB
 
-    function sqlite_to_arrow(query::String, output::String="output.arrow")::Nothing
+    """
+        get_query(filename::AbstractString) -> String
+
+        Returns the SQL query from an SQL file as a String:
+    """
+    function get_query(filename::AbstractString)::String
+
+        if !isfile(filename)
+            throw(ArgumentError("file '$filename' not found"))
+        end
+
+        query = open(filename) do file
+            read(file, String)
+        end
+
+        return query
+
+    end
+
+    function sqlite_to_arrow(query::String, output::String)::Nothing
 
         duck = DBInterface.connect(DuckDB.DB, ":memory:")
         DBInterface.execute(duck, "LOAD sqlite")
