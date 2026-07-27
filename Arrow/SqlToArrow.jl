@@ -42,8 +42,7 @@ module SQLtoArrow
 
     function main(SQLiteFilename::AbstractString)
 
-        query = MetaQuery.get_query(SQLiteFilename)
-        outputfile = MetaQuery.table_name(query)
+        query = get_query(SQLiteFilename)
         sqlite_to_arrow(query, "$(outputfile).arrow")
 
     end
