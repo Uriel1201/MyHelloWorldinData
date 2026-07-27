@@ -40,10 +40,10 @@ module SQLtoArrow
 
     end
 
-    function main(SQLiteFilename::AbstractString)
+    function main(SQLiteFilename::AbstractString, OutputFile::String)
 
         query = get_query(SQLiteFilename)
-        sqlite_to_arrow(query, "$(outputfile).arrow")
+        sqlite_to_arrow(query, "$(OutputFile).arrow")
 
     end
 
@@ -54,6 +54,7 @@ if Base.@isdefined(PROGRAM_FILE) &&
     abspath(PROGRAM_FILE) == abspath(@__FILE__)
 
     a = ARGS[1]
-    main(a)
+    b = ARGS[2]
+    main(a, b)
 
 end
