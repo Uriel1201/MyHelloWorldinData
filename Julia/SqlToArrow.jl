@@ -26,16 +26,19 @@ module SQLtoArrow
         duck = DBInterface.connect(DuckDB.DB, ":memory:")
 
         try
+        
             DBInterface.execute(duck, "LOAD sqlite")
             cursor = DBInterface.execute(duck, query)
             Arrow.write(output, cursor)
         
         finally 
+        
             DBInterface.close!(duck)
 
         end
 
         return 
+    
             nothing
 
     end
