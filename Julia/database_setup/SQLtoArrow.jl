@@ -1,6 +1,7 @@
 module SQLtoArrow
 
-    using Arrow, DuckDB, DBInterface 
+    using Arrow, DuckDB, DBInterface
+    export get_query, sqlite_to_arrow
 
     """
         get_query(filename::AbstractString) -> String
