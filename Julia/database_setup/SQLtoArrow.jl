@@ -31,6 +31,11 @@ module SQLtoArrow
             DBInterface.execute(duck, "LOAD sqlite")
             cursor = DBInterface.execute(duck, query)
             Arrow.write(output, cursor)
+
+        catch e
+
+            @error "Error processing query: $e"
+            rethrow(e)
         
         finally 
         
