@@ -29,6 +29,7 @@ module MyQueries
 
         duck = DBInterface.connect(DuckDB.DB, ":memory:")
         duck_query(duck, ArrowFile, DuckQuery)
+        DBInterface.close!(duck)
 
     end
 
