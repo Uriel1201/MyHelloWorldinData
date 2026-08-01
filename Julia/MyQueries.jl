@@ -5,7 +5,7 @@ module MyQueries
     function duck_query(duck::DuckDB.DB, ArrowFile::AbstractString, DuckQuery::AbstractString)::DuckDB.QueryResult
    
         list = ["USERS_01"]
-        table_name = "USERS_01" #first(splitext(ArrowFile))
+        table_name = first(splitext(ArrowFile))
         if !(table_name in list)
             throw(ArgumentError("Table not registered: $TableName"))
         end
