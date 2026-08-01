@@ -1,34 +1,34 @@
-module MyQueries 
+module MyQueries
 
     using Arrow, DuckDB, ..SQLtoArrow
-    
-    function duck_query(duck::DuckDB.DB, ArrowFile::AbstractString, DuckQuery::AbstractString)::DuckDB.QueryResult
-   
-        list = ["USERS_01"]
-        table_name = first(splitext(ArrowFile))
-        if !(table_name in list)
-            throw(ArgumentError("Table not registered: $TableName"))
+    const REGISTERED_TABLES = Set(["USERS_01"])
+
+    function duck_query(duck::DuckDB.DB, ArrowFile::AbstractString, DuckQuery::AbstractString)::Nothing 
+
+        table_name = first(splitext(basename(ArrowFile)))
+        if !(table_name in REGISTERED_TABLES)
+            throw(ArgumentError("Table name not available: $table_name"))
         end
-        
+
         query = SQLtoArrow.get_query(DuckQuery)
         table = Arrow.Table(ArrowFile)
         DuckDB.register_data_frame(duck, table, table_name)
-      
-        return DBInterface.execute(duck, query)
+
+        cursor = DBInterface.execute(duck, query)
+
+        for (i, row) in enumerate(cursor)
+
+            println(row)
+            i >= 15 && break
+
+        end
 
     end
 
     function main(ArrowFile::AbstractString, DuckQuery::AbstractString)
 
         duck = DBInterface.connect(DuckDB.DB, ":memory:")
-        query = duck_query(duck, ArrowFile, DuckQuery)
-
-        for (i, row) in enumerate(query)
-
-            println(row)
-            i >= 10 && break
-
-        end
+        duck_query(duck, ArrowFile, DuckQuery)
 
     end
 
