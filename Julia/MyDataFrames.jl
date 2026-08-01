@@ -9,7 +9,7 @@ module MyDataFrames
     - `CANCEL_RATE`  = (#cancels / #starts) or `missing` if there are no starts.
     - `PUBLISH_RATE` = (#publishes / #starts) or `missing` if there are no starts.
     """
-    function cancellation_rates(users_01::Arrow.Table)::DataFrame
+    function cancellation_rates_01(users_01::Arrow.Table)::DataFrame
 
         df = DataFrame(users_01, copycols = false)
 
@@ -39,7 +39,7 @@ module MyDataFrames
  
         table = Arrow.Table(ArrowFilename)
         print("\nCancellation Rates By Each User\n")
-        print(cancellation_rates(table))
+        print(cancellation_rates_01(table))
 
     end
 
