@@ -3,33 +3,39 @@ module MyQueries
     using Arrow, DuckDB, ..SQLtoArrow
     const REGISTERED_TABLES = Set(["USERS_01"])
 
-    function duck_query(duck::DuckDB.DB, ArrowFile::AbstractString, DuckQuery::AbstractString)::Nothing 
+    struct MyArrowTable
+        name::String
+        table::Arrow.Table
+    end
 
-        table_name = first(splitext(basename(ArrowFile)))
-        if !(table_name in REGISTERED_TABLES)
-            throw(ArgumentError("Table name not available: $table_name"))
-        end
+    function duck_query(duck::DuckDB.DB, ArrowTable::MyArrowTable, DuckQuery::AbstractString)::DuckDB.QueryResult
 
         query = SQLtoArrow.get_query(DuckQuery)
-        table = Arrow.Table(ArrowFile)
-        DuckDB.register_data_frame(duck, table, table_name)
+        DuckDB.register_data_frame(duck, ArrowTable.table, ArrowTable.name)
+        return cursor = DBInterface.execute(duck, query)
 
-        cursor = DBInterface.execute(duck, query)
+    end
 
-        for (i, row) in enumerate(cursor)
+    function main(ArrowFile::AbstractString, DuckQuery::AbstractString, TableName::String)
+
+        duck = DBInterface.connect(DuckDB.DB, ":memory:")
+
+        arrow_table = MyArrowTable(
+                          TableName,
+                          Arrow.Table(ArrowFile)              
+        )
+
+        if !(TableName in REGISTERED_TABLES)
+            throw(ArgumentError("Table name not available: $TableName"))
+        end
+
+        query = duck_query(duck, arrow_table, DuckQuery)
+        for (i, row) in enumerate(query)
 
             println(row)
             i >= 15 && break
 
         end
-
-    end
-
-    function main(ArrowFile::AbstractString, DuckQuery::AbstractString)
-
-        duck = DBInterface.connect(DuckDB.DB, ":memory:")
-        duck_query(duck, ArrowFile, DuckQuery)
-        DBInterface.close!(duck)
 
     end
 
