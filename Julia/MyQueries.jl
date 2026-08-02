@@ -47,6 +47,7 @@ if Base.@isdefined(PROGRAM_FILE) &&
 
     a = ARGS[1]
     b = ARGS[2]
-    main(a, b)
+    c = ARGS[3]
+    main(a, b, c)
 
 end
