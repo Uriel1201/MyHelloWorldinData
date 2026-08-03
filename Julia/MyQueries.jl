@@ -44,9 +44,9 @@ module MyQueries
 
     end
 
-    function main(ArrowFile::AbstractString, DuckQuery::AbstractString, TableName::String)
+    function main(ArrowFile::AbstractString, DuckQuery::AbstractString)
 
-        print_duck_query(ArrowFile, DuckQuery, TableName)
+        print_duck_query(ArrowFile, DuckQuery)
 
     end
 
