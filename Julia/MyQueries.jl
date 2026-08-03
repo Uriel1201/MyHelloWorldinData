@@ -8,15 +8,15 @@ module MyQueries
         table::Arrow.Table
     end
 
-    function duck_query(duck::DuckDB.DB, ArrowTable::MyArrowTable, DuckQuery::AbstractString)::DuckDB.QueryResult
+    function get_duck_query(duck::DuckDB.DB, ArrowTable::MyArrowTable, DuckQuery::AbstractString)::DuckDB.QueryResult
 
-        query = SQLtoArrow.get_query(DuckQuery)
+        query = get_query(DuckQuery)
         DuckDB.register_data_frame(duck, ArrowTable.table, ArrowTable.name)
         return cursor = DBInterface.execute(duck, query)
 
     end
 
-    function main(ArrowFile::AbstractString, DuckQuery::AbstractString, TableName::String)
+    function print_duck_query(ArrowFile::AbstractString, DuckQuery::AbstractString, TableName::String)::Nothing 
 
         duck = DBInterface.connect(DuckDB.DB, ":memory:")
 
@@ -29,13 +29,19 @@ module MyQueries
             throw(ArgumentError("Table name not available: $TableName"))
         end
 
-        query = duck_query(duck, arrow_table, DuckQuery)
+        query = get_duck_query(duck, arrow_table, DuckQuery)
         for (i, row) in enumerate(query)
 
             println(row)
             i >= 15 && break
 
         end
+
+    end
+
+    function main(ArrowFile::AbstractString, DuckQuery::AbstractString, TableName::String)
+
+    print_duck_query(ArrowFile, DuckQuery, TableName)
 
     end
 
