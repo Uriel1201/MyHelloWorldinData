@@ -20,16 +20,17 @@ module MyQueries
 
         duck = DBInterface.connect(DuckDB.DB, ":memory:")
 
+        if !(TableName in REGISTERED_TABLES)
+            throw(ArgumentError("Table name not available: $TableName"))
+        end
+
         arrow_table = MyArrowTable(
                           TableName,
                           Arrow.Table(ArrowFile)              
         )
 
-        if !(TableName in REGISTERED_TABLES)
-            throw(ArgumentError("Table name not available: $TableName"))
-        end
-
         query = get_duck_query(duck, arrow_table, DuckQuery)
+        DBInterface.close!(duck)
         for (i, row) in enumerate(query)
 
             println(row)
@@ -41,7 +42,7 @@ module MyQueries
 
     function main(ArrowFile::AbstractString, DuckQuery::AbstractString, TableName::String)
 
-    print_duck_query(ArrowFile, DuckQuery, TableName)
+        print_duck_query(ArrowFile, DuckQuery, TableName)
 
     end
 
@@ -53,7 +54,6 @@ if Base.@isdefined(PROGRAM_FILE) &&
 
     a = ARGS[1]
     b = ARGS[2]
-    c = ARGS[3]
-    main(a, b, c)
+    main(a, b)
 
 end
