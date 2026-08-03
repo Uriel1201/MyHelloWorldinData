@@ -27,24 +27,24 @@ module SQLtoArrow
         duck = DBInterface.connect(DuckDB.DB, ":memory:")
 
         try
-        
+
             DBInterface.execute(duck, "LOAD sqlite")
             cursor = DBInterface.execute(duck, query)
-            Arrow.write(output, cursor)
+            Arrow.write("$output.arrow", cursor)
 
         catch e
 
             @error "Error processing query: $e"
             rethrow(e)
-        
-        finally 
-        
+
+        finally
+
             DBInterface.close!(duck)
 
         end
 
-        return 
-    
+        return
+
             nothing
 
     end
@@ -52,7 +52,7 @@ module SQLtoArrow
     function main(SQLiteFilename::AbstractString, OutputFile::String)
 
         query = get_query(SQLiteFilename)
-        sqlite_to_arrow(query, "$(OutputFile).arrow")
+        sqlite_to_arrow(query, OutputFile)
 
     end
 
