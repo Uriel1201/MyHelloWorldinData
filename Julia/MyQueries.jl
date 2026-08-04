@@ -1,14 +1,8 @@
 module MyQueries
 
-    using Arrow, DuckDB, ..SQLtoArrow
-    const REGISTERED_TABLES = Set(["USERS_01"])
+    using Arrow, DuckDB, ..SQLtoArrow, ..Config
 
-    struct MyArrowTable
-        name::String
-        table::Arrow.Table
-    end
-
-    function get_duck_query(duck::DuckDB.DB, ArrowTable::MyArrowTable, DuckQuery::AbstractString)::DuckDB.QueryResult
+    function get_duck_query(duck::DuckDB.DB, ArrowTable::Config.MyArrowTable, DuckQuery::AbstractString)::DuckDB.QueryResult
 
         query = get_query(DuckQuery)
         DuckDB.register_data_frame(duck, ArrowTable.table, ArrowTable.name)
@@ -18,7 +12,7 @@ module MyQueries
 
     function get_my_arrow_table(ArrowFile::AbstractString)::MyArrowTable
 
-        return MyArrowTable(
+        return Config.MyArrowTable(
                    splitext(basename(ArrowFile))[1],
                    Arrow.Table(ArrowFile)
                )
@@ -29,7 +23,7 @@ module MyQueries
 
         duck = DBInterface.connect(DuckDB.DB, ":memory:")
         my_table = get_my_arrow_table(ArrowFile)
-        if !(my_table.name in REGISTERED_TABLES)
+        if !(my_table.name in Config.REGISTERED_TABLES)
             throw(ArgumentError("Table name not available: $TableName"))
         end
 
