@@ -1,4 +1,8 @@
-struct MyArrowTable
-        name::String
-        table::Arrow.Table
+module MyStructs
+
+    struct MyArrowTable
+            name::String
+            table::Arrow.Table
+    end
+
 end
