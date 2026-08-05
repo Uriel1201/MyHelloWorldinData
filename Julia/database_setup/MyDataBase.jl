@@ -1,6 +1,6 @@
 module MyDataBase
 
-using SQLite
+using SQLite, ..Config
 const Tables = SQLite.Tables
 
 #=
@@ -8,11 +8,7 @@ const Tables = SQLite.Tables
 **********************************************
 =#
 
-struct DatabaseConfig
 
-    db_path::String
-
-end
 
 #=
 **********************************************
