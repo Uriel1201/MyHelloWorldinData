@@ -15,7 +15,7 @@ const Tables = SQLite.Tables
 **********************************************
 =#
 
-function sqlite_connection(f::Function, config::DatabaseConfig)
+function sqlite_connection(f::Function, config::Config.DatabaseConfig)
 
     db = SQLite.DB(config.db_path)
     @info "SQLite: Connection Open"
@@ -400,9 +400,9 @@ end
 **********************************************
 =#
 
-function main()
+function construct_database()
 
-    config = DatabaseConfig("MyDataBase.db")
+    config = Config.DatabaseConfig("MyDataBase.db")
     sqlite_connection(config) do db
 
         users_01(db)
