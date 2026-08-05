@@ -2,9 +2,7 @@ module Config
 
     using Arrow
 
-    export REGISTERED_TABLES
-    export MyArrowTable 
-    export get_my_arrow_table
+    export REGISTERED_TABLES, MyArrowTable, get_my_arrow_table
 
     const REGISTERED_TABLES = Set(["USERS_01"])
     
