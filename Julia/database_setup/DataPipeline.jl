@@ -23,6 +23,7 @@ module DataPipeline
         println("\nUSING DUCKDB TO PRINT THE CORRESPONDING QUERY")
         query = MyQueries.get_duck_query(duck, my_table, "rates.sql")
         MyQueries.print_duck_query(query)
+        DBInterface.close!(duck)
 
     end
 
