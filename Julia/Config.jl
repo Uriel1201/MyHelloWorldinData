@@ -1,5 +1,7 @@
 module Config
 
+    using Arrow
+
     export REGISTERED_TABLES
     export MyArrowTable 
 
