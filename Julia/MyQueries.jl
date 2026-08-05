@@ -4,32 +4,19 @@ module MyQueries
 
     function get_duck_query(duck::DuckDB.DB, ArrowTable::Config.MyArrowTable, DuckQuery::AbstractString)::DuckDB.QueryResult
 
+        if !(ArrowTable.name in Config.REGISTERED_TABLES)
+            throw(ArgumentError("Table name not available: $TableName"))
+        end
+    
         query = get_query(DuckQuery)
         DuckDB.register_data_frame(duck, ArrowTable.table, ArrowTable.name)
         return cursor = DBInterface.execute(duck, query)
 
     end
 
-    function get_my_arrow_table(ArrowFile::AbstractString)::MyArrowTable
+    function print_duck_query(cursor::DuckDB.QueryResult)::Nothing 
 
-        return Config.MyArrowTable(
-                   splitext(basename(ArrowFile))[1],
-                   Arrow.Table(ArrowFile)
-               )
-    
-    end
-
-    function print_duck_query(ArrowFile::AbstractString, DuckQuery::AbstractString)::Nothing 
-
-        duck = DBInterface.connect(DuckDB.DB, ":memory:")
-        my_table = get_my_arrow_table(ArrowFile)
-        if !(my_table.name in Config.REGISTERED_TABLES)
-            throw(ArgumentError("Table name not available: $TableName"))
-        end
-
-        query = get_duck_query(duck, my_table, DuckQuery)
-        DBInterface.close!(duck)
-        for (i, row) in enumerate(query)
+        for (i, row) in enumerate(cursor)
 
             println(row)
             i >= 15 && break
