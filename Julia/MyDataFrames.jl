@@ -30,29 +30,3 @@ module MyDataFrames
                end
 
     end
-
-    function main(ArrowFilename::AbstractString)
-
-        if !endswith(ArrowFilename, ".arrow")
-            throw(ArgumentError("File must have extension.arrow: $ArrowFilename"))
-        end
-    
-    
-        println("Processing Arrow File: $ArrowFilename")
- 
-        table = Arrow.Table(ArrowFilename)
-        print("\nCancellation Rates By Each User\n")
-        print(cancellation_rates_01(table))
-
-    end
-
-end
-
-if Base.@isdefined(PROGRAM_FILE) &&
-
-    abspath(PROGRAM_FILE) == abspath(@__FILE__)
-
-    a = ARGS[1]
-    main(a)
-
-end
