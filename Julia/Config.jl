@@ -7,8 +7,14 @@ module Config
     const REGISTERED_TABLES = Set(["USERS_01"])
     
     struct MyArrowTable
-            name::String
-            table::Arrow.Table
+               name::String
+               table::Arrow.Table
+    end
+
+    struct DatabaseConfig
+
+               db_path::String
+
     end
 
     function get_my_arrow_table(ArrowFile::AbstractString)::MyArrowTable
