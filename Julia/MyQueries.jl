@@ -5,7 +5,7 @@ module MyQueries
     function get_duck_query(duck::DuckDB.DB, ArrowTable::Config.MyArrowTable, DuckQuery::AbstractString)::DuckDB.QueryResult
 
         if !(ArrowTable.name in Config.REGISTERED_TABLES)
-            throw(ArgumentError("Table name not available: $TableName"))
+            throw(ArgumentError("Table name not available: $(ArrowTable.name)"))
         end
     
         query = get_query(DuckQuery)
@@ -24,3 +24,5 @@ module MyQueries
         end
 
     end
+
+end
