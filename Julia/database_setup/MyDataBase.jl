@@ -2,19 +2,10 @@ module MyDataBase
 
 using SQLite, ..Config
 const Tables = SQLite.Tables
-
 #=
 **********************************************
 **********************************************
 =#
-
-
-
-#=
-**********************************************
-**********************************************
-=#
-
 function sqlite_connection(f::Function, config::Config.DatabaseConfig)
 
     db = SQLite.DB(config.db_path)
@@ -37,12 +28,10 @@ function sqlite_connection(f::Function, config::Config.DatabaseConfig)
     end
 
 end
-
 #=
 **********************************************
 **********************************************
 =#
-
 function is_available(db::SQLite.DB, table::String)::Bool
 
     name = uppercase(table)
@@ -52,12 +41,10 @@ function is_available(db::SQLite.DB, table::String)::Bool
     return name in names
 
 end
-
 #=
 **********************************************
 **********************************************
 =#
-
 function users_01(db::SQLite.DB)
 
     if !is_available(db, "users_01")
@@ -93,12 +80,10 @@ function users_01(db::SQLite.DB)
     end
 
 end
-
 #=
 **********************************************
 **********************************************
 =#
-
 function transactions_02(db::SQLite.DB)
 
     if !is_available(db, "transactions_02")
@@ -130,12 +115,10 @@ function transactions_02(db::SQLite.DB)
     end
 
 end
-
 #=
 **********************************************
 **********************************************
 =#
-
 function items_03(db::SQLite.DB)
 
     if  !is_available(db, "items_03")
@@ -176,12 +159,10 @@ function items_03(db::SQLite.DB)
     end
 
 end
-
 #=
 **********************************************
 **********************************************
 =#
-
 function users_04(db::SQLite.DB)
 
     if  !is_available(db, "users_04")
@@ -237,12 +218,10 @@ function users_04(db::SQLite.DB)
     end
 
 end
-
 #=
 **********************************************
 **********************************************
 =#
-
 function users_05(db::SQLite.DB)
 
     if  !is_available(db, "users_05")
@@ -298,12 +277,10 @@ function users_05(db::SQLite.DB)
     end
 
 end
-
 #=
 **********************************************
 **********************************************
 =#
-
 function friendship_06(db::SQLite.DB)
 
     if !is_available(db, "friends_06")
@@ -394,12 +371,10 @@ function friendship_06(db::SQLite.DB)
     end
 
 end
-
 #=
 **********************************************
 **********************************************
 =#
-
 function construct_database()
 
     config = Config.DatabaseConfig("MyDataBase.db")
