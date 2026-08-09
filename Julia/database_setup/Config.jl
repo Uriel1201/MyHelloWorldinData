@@ -17,13 +17,4 @@ module Config
 
     end
 
-    function get_my_arrow_table(ArrowFile::AbstractString)::MyArrowTable
-
-        return Config.MyArrowTable(
-                   splitext(basename(ArrowFile))[1],
-                   Arrow.Table(ArrowFile)
-               )
-    
-    end
-
 end
