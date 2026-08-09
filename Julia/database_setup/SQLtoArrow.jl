@@ -1,6 +1,6 @@
 module SQLtoArrow
 
-    using Arrow, DuckDB, DBInterface
+    using Arrow, DuckDB, DBInterface, .Config
     export get_query, sqlite_to_arrow
 
     """
@@ -55,6 +55,15 @@ module SQLtoArrow
         sqlite_to_arrow(query, OutputFile)
 
     end
+
+    function get_my_arrow_table(ArrowFile::AbstractString)::MyArrowTable
+
+        return Config.MyArrowTable(
+                   splitext(basename(ArrowFile))[1],
+                   Arrow.Table(ArrowFile)
+               )
+    
+end
 
 end
 
