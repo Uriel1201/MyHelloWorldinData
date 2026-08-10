@@ -49,13 +49,6 @@ module SQLtoArrow
 
     end
 
-    function main(SQLiteFilename::AbstractString, OutputFile::String)
-
-        query = get_query(SQLiteFilename)
-        sqlite_to_arrow(query, OutputFile)
-
-    end
-
     function get_my_arrow_table(ArrowFile::AbstractString)::MyArrowTable
 
         return Config.MyArrowTable(
@@ -63,16 +56,6 @@ module SQLtoArrow
                    Arrow.Table(ArrowFile)
                )
     
-end
-
-end
-
-if Base.@isdefined(PROGRAM_FILE) &&
-
-    abspath(PROGRAM_FILE) == abspath(@__FILE__)
-
-    a = ARGS[1]
-    b = ARGS[2]
-    main(a, b)
+    end
 
 end
