@@ -35,12 +35,3 @@ def sqlite_to_arrow(Query:str, outputNameFile:str) -> None:
     except Exception as e:
 
         print(f'Corrupted query or table not available: {e}')
-
-# ============================================================
-# read_arrow_file:
-# params:
-# ============================================================
-def read_arrow_file(ArrowFile:str) -> pa.lib.Table:
-
-    with pa.memory_map(ArrowFile, 'rb') as source:
-        return pa.ipc.open_file(source).read_all()
