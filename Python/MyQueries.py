@@ -28,4 +28,4 @@ def print_sqlite_query(conn: dbapi.AdbcSqliteConnection, SQLiteQuery: str) -> No
         )
         batches = cursor.execute(query).fetch_record_batch()
         for batch in batches:
-            print(f'************\n{batch}\n************\n')
+            print(f'**********\n{batch.to_pandas()}')
