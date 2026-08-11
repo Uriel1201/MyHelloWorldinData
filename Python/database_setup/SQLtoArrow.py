@@ -1,5 +1,6 @@
 import adbc_driver_sqlite.dbapi as dbapi
 import pyarrow as pa
+import config 
 
 # ============================================================
 # get_query:
@@ -35,3 +36,15 @@ def sqlite_to_arrow(Query:str, outputNameFile:str) -> None:
     except Exception as e:
 
         print(f'Corrupted query or table not available: {e}')
+
+# ============================================================
+# get_my_arrow_table:
+# params:
+# ============================================================
+def get_my_arrow_table(ArrowFile:str) -> MyArrowTable:
+
+    with pa.memory_map(ArrowFile, 'rb') as source:
+
+        return config.MyArrowTable(table = pa.ipc.open_file(source).read_all(),
+                                   alias = splitext(basename(ArrowFile))[0]
+                      )
