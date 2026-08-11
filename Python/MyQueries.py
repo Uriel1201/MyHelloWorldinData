@@ -1,7 +1,6 @@
 import duckdb
 import config
 import adbc_driver_sqlite.dbapi as dbapi
-import duckdb as duck
 import SQLtoArrow as sa
 
 # ============================================================
