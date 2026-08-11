@@ -46,7 +46,7 @@ def sqlite_to_arrow(Query:str, outputNameFile:str) -> None:
 # get_my_arrow_table:
 # params:
 # ============================================================
-def get_my_arrow_table(ArrowFile:str) -> MyArrowTable:
+def get_my_arrow_table(ArrowFile:str) -> config.MyArrowTable:
 
     with pa.memory_map(ArrowFile, 'rb') as source:
 
