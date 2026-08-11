@@ -27,6 +27,11 @@ def sqlite_to_arrow(Query:str, outputNameFile:str) -> None:
     try:
         with dbapi.connect("file:/content/MyDataBase.db?mode=ro").cursor() as cursor:
           
+            cursor.adbc_statement.set_options(
+                **{
+            "adbc.sqlite.query.batch_rows": 3,
+                }
+            )
             batches = cursor.execute(Query).fetch_record_batch()
             with pa.OSFile(f'{outputNameFile}.arrow', 'wb') as my_file:
                 with pa.ipc.new_file(my_file, batches.schema) as writer:
