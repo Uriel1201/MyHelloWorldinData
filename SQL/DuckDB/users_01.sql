@@ -4,7 +4,7 @@ WITH DUCKTABLE AS (
     SELECT
         USER_ID,
         ACTION,
-        STRFTIME(DATES, '%Y-%m-%d')::DATE AS DATES
+        STRPTIME(DATES, '%Y-%m-%d')
     FROM
         sqlite_scan('MyDataBase.db', 'USERS_01')
     )
