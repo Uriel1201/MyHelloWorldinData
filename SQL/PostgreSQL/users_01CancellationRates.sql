@@ -1,3 +1,11 @@
+/* 
+01. Cancellation Rates.
+
+Write a query to return the publication and cancellation
+rate for each user. */
+
+-- PostgreSQL.
+/********************************************************************/
 with
     "TOTALS" as (
         select
