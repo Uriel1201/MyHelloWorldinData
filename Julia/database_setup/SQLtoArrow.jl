@@ -74,7 +74,7 @@ module SQLtoArrow
 
     end
 
-    function get_my_arrow_table(ArrowFile::AbstractString)::MyArrowTable
+    function get_my_arrow_table(ArrowFile::AbstractString)::Config.MyArrowTable
 
         return Config.MyArrowTable(
                    splitext(basename(ArrowFile))[1],
