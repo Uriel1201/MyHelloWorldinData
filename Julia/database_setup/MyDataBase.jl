@@ -52,16 +52,16 @@ function users_01(db::SQLite.DB)
         schema = Tables.Schema((:USER_ID, :ACTION, :DATES), (Int32, String, String))
         SQLite.createtable!(db, "USERS_01", schema, temp = false)
 
-        rows = [(1, "start", "01-jan-20"),
-                (1, "cancel", "02-jan-20"),
-                (2, "start", "03-jan-20"),
-                (2, "publish", "04-jan-20"),
-                (3, "start", "05-jan-20"),
-                (3, "cancel", "06-jan-20" ),
-                (1, "start", "07-jan-20"),
-                (1, "publish", "08-jan-20"),
-                (3, "start", "09-jan-20"),
-                (3, "cancel", "10-jan-20")]
+        rows = [(1,"start","2020-01-01T00:00:00Z"),
+                (1,"cancel","2020-01-02T00:00:00Z"),
+                (2,"start","2020-01-03T00:00:00Z"),
+                (2, "publish", "2020-01-04T00:00:00Z"),
+                (3,"start","2020-01-05T00:00:00Z"),
+                (3,"cancel","2020-01-06T00:00:00Z"),
+                (1,"start","2020-01-07T00:00:00Z"),
+                (1,"publish","2020-01-08T00:00:00Z"),
+                (3,"start","2020-01-09T00:00:00Z"),
+                (3,"cancel","2020-01-10T00:00:00Z")]
 
         placeholders = join(["(?, ?, ?)" for _ in rows], ", ")
         query = "INSERT INTO USERS_01 (USER_ID, ACTION, DATES) VALUES $placeholders"
