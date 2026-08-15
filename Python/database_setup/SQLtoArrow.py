@@ -29,7 +29,7 @@ def sqlite_to_arrow(Query:str, outputNameFile:str) -> None:
           
             cursor.adbc_statement.set_options(
                 **{
-            "adbc.sqlite.query.batch_rows": 3,
+            "adbc.sqlite.query.batch_rows": 1,
                 }
             )
             batches = cursor.execute(Query).fetch_record_batch()
