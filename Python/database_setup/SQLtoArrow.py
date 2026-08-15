@@ -1,4 +1,5 @@
 import adbc_driver_sqlite.dbapi as dbapi
+import oracledb as odb
 import pyarrow as pa
 import config 
 
@@ -43,12 +44,12 @@ def sqlite_to_arrow(Query:str, outputNameFile:str) -> None:
         print(f'Corrupted query or table not available: {e}')
         
 # ============================================================
-# sqlite_to_arrow:
+# oracledb_to_arrow:
 # params:
 # ============================================================
 def oracledb_to_arrow(conn:odb.Connection, query: str, output: str) -> None:
     try:
-        odf = conn.fetch_df_batches(statement= query, size = 10000)
+        odf = conn.fetch_df_batches(statement = query, size = 10000)
         first_df = next(odf)    
         batch = pa.RecordBatch.from_arrays(first_df.column_arrays(), names = first_df.column_names())
         with pa.OSFile(f'{output}.arrow', 'wb') as my_file:
