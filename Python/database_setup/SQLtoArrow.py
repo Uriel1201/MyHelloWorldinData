@@ -1,6 +1,6 @@
 # /// script
 # dependencies = [
-#   "adbc_driver_sqlite.dbapi",
+#   "adbc-driver-sqlite",
 #   "oracledb",
 #   "pyarrow",
 # ]
