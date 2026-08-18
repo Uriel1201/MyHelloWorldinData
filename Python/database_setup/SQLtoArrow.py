@@ -1,3 +1,10 @@
+# /// script
+# dependencies = [
+#   "adbc_driver_sqlite.dbapi",
+#   "oracledb",
+#   "pyarrow",
+# ]
+# ///
 import adbc_driver_sqlite.dbapi as dbapi
 import oracledb as odb
 import pyarrow as pa
