@@ -1,13 +1,26 @@
-USERS_01 **PostgreSQL**
+USERS_01 ***PostgreSQL***
 | column_name | data_type                | is_nullable | 
 | ----------- | ------------------------ | ----------- | 
 | USER_ID     | bigint                   | YES         |        |
 | ACTION      | text                     | YES         | 
 | DATES       | timestamp with time zone | YES         |   
 
-USERS_01 **Oracle**
+USERS_01 ***Oracle***
 Name    Null?    Type        
 ------- -------- ----------- 
 USER_ID NOT NULL NUMBER(38)  
 ACTION           VARCHAR2(9) 
-DATES            DATE        
+DATES            DATE       
+
+USERS_01 ***MySQL***
+┌──────────┬─────────────┬──────┬─────┬─────────┬────────────────┐
+│ Field    ┆ Type        ┆ Null ┆ Key ┆ Default ┆ Extra          │
+│ ---      ┆ ---         ┆ ---  ┆ --- ┆ ---     ┆ ---            │
+│ str      ┆ str         ┆ str  ┆ str ┆ str     ┆ str            │
+╞══════════╪═════════════╪══════╪═════╪═════════╪════════════════╡
+│ EVENT_ID ┆ bigint      ┆ NO   ┆ PRI ┆ null    ┆ auto_increment │
+│ USER_ID  ┆ bigint      ┆ NO   ┆     ┆ null    ┆                │
+│ ACTION   ┆ varchar(10) ┆ NO   ┆     ┆ null    ┆                │
+│ DATES    ┆ date        ┆ NO   ┆     ┆ null    ┆                │
+└──────────┴─────────────┴──────┴─────┴─────────┴────────────────┘
+
