@@ -1,7 +1,7 @@
 USERS_01 ***PostgreSQL***
 | column_name | data_type                | is_nullable | 
 | ----------- | ------------------------ | ----------- | 
-| USER_ID     | bigint                   | YES         |        |
+| USER_ID     | bigint                   | YES         |        
 | ACTION      | text                     | YES         | 
 | DATES       | timestamp with time zone | YES         |   
 
