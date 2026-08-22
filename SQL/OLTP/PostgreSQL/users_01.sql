@@ -3,4 +3,4 @@ select
   "ACTION", 
   "DATES"::date as "DATES"
 from 
-  "USERS_01";
+  "USERS_01"
