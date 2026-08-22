@@ -6,8 +6,8 @@ USERS_01 **PostgreSQL**
 | DATES       | timestamp with time zone | YES         |   
 
 USERS_01 **Oracle**
-Name    Null? Type        
-------- ----- ----------- 
-USER_ID       NUMBER(38)  
-ACTION        VARCHAR2(9) 
-DATES         DATE        
+Name    Null?    Type        
+------- -------- ----------- 
+USER_ID NOT NULL NUMBER(38)  
+ACTION           VARCHAR2(9) 
+DATES            DATE        
