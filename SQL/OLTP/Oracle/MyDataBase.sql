@@ -1,7 +1,7 @@
 /* ORACLE 23ai. */
 /********************************************************************/
 CREATE TABLE USERS_01 (
-    USER_ID INTEGER,
+    USER_ID INTEGER NOT NULL,
     ACTION  VARCHAR(9),
     DATES   DATE
 );
