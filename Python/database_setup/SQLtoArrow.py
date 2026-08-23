@@ -1,13 +1,15 @@
 # /// script
+# requires-python = ">=3.10"
 # dependencies = [
-#   "adbc-driver-sqlite",
+#   "adbc-driver-manager>=1.9.0",
 #   "oracledb",
-#   "pyarrow",
+#   "pyarrow"
 # ]
 # ///
-import adbc_driver_sqlite.dbapi as dbapi
+from adbc_driver_manager import dbapi
 import oracledb as odb
 import pyarrow as pa
+import pyarrow.dataset as ds
 import config 
 
 # ============================================================
