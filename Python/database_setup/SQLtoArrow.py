@@ -34,7 +34,7 @@ def sqlite_to_arrow(query: str, output_file: str) -> None:
         with (
             dbapi.connect(
                 driver="sqlite",
-                db_kwargs={"uri": "file:MyDataBase.db?mode=ro"},
+                db_kwargs={"uri": "file:data/MyDataBase.db?mode=ro"},
             ) as con,
             con.cursor() as cursor,
         ):
