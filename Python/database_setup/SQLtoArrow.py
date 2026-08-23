@@ -70,7 +70,7 @@ def oracledb_to_arrow(query:str, output:str) -> None:
 # arrow_to_mysql:
 # params:
 # ============================================================
-def arrow_to_mysql(arrowFile:str, tableName:str) -> None:
+def arrow_to_mysql(arrowFile:str, table_name:str) -> None:
 
     try:
         with (
@@ -81,12 +81,12 @@ def arrow_to_mysql(arrowFile:str, tableName:str) -> None:
                 ) as con,
             con.cursor() as cursor
         ):
-            cursor.execute("""
+            cursor.execute(f'
                 SELECT 
                     COALESCE (MAX(EVENT_ID),0)
                 FROM
-                    USERS_01
-                """)
+                    {table_name}
+                ')
             last_event=cursor.fetchone()[0]
             with pa.memory_map(arrowFile, 'rb') as source:
                 with pa.ipc.open_file(source) as reader:
