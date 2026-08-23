@@ -48,10 +48,10 @@ def sqlite_to_arrow(query: str, output_file: str) -> None:
 
 
 # ============================================================
-# oracledb_to_arrow:
+# odb_to_arrow:
 # params:
 # ============================================================
-def oracledb_to_arrow(query: str, output_file: str) -> None:
+def odb_to_arrow(query: str, output_file: str) -> None:
     try:
         with odb.connect(
             user=config.ODB_USER, password=config.ODB_PASSWORD, dsn=config.ODB_DSN
@@ -106,16 +106,16 @@ def arrow_to_mysql(arrow_file: str, table_name: str) -> None:
                         )
                         last_event += batch.num_rows
                         batch = batch.add_column(0, "EVENT_ID", ids)
-                        cursor.adbc_ingest(tableName, batch, mode="append")
+                        cursor.adbc_ingest(table_name, batch, mode="append")
     except Exception as e:
         print(f"Corrupted query or table not available: {e}")
 
 
 # ============================================================
-# csv_to_postgresql:
+# csv_to_posql:
 # params:
 # ============================================================
-def csv_to_postgresql(path: str, table_name: str, exists: bool) -> None:
+def csv_to_posql(path: str, table_name: str, exists: bool) -> None:
     dataset = ds.dataset(path, format="csv")
     reader = dataset.scanner().to_reader()
     try:
@@ -132,7 +132,7 @@ def csv_to_postgresql(path: str, table_name: str, exists: bool) -> None:
                 first = True
             for batch in reader:
                 cursor.adbc_ingest(
-                    tableName, batch, mode="create" if first else "append"
+                    table_name, batch, mode="create" if first else "append"
                 )
                 first = False
             conn.commit()
@@ -141,19 +141,21 @@ def csv_to_postgresql(path: str, table_name: str, exists: bool) -> None:
 
 
 # ============================================================
-# get_my_arrow_table:
+# get_my_table:
 # params:
 # ============================================================
-def get_my_arrow_table(ArrowFile: str) -> config.MyArrowTable:
-    with pa.memory_map(ArrowFile, "rb") as source:
+def get_my_table(arrow_file: str) -> config.MyArrowTable:
+    with pa.memory_map(arrow_file, "rb") as source:
         return config.MyArrowTable(
             table=pa.ipc.open_file(source).read_all(),
-            alias=splitext(basename(ArrowFile))[0],
+            alias=splitext(basename(arrow_file))[0],
         )
 
 
 # ============================================================
 def main():
+    sql = get_query("SQL/OLTP/Oracle/odb_01.sql")
+    odb_to_arrow(sql, "USERS_01")
     csv_to_postgresql(config.DATA_PATH, "USERS_01", exists=False)
 
 
