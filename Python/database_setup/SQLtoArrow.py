@@ -81,12 +81,12 @@ def arrow_to_mysql(arrowFile:str, table_name:str) -> None:
                 ) as con,
             con.cursor() as cursor
         ):
-            cursor.execute(f'
+            cursor.execute(f"""
                 SELECT 
                     COALESCE (MAX(EVENT_ID),0)
                 FROM
                     {table_name}
-                ')
+                """)
             last_event=cursor.fetchone()[0]
             with pa.memory_map(arrowFile, 'rb') as source:
                 with pa.ipc.open_file(source) as reader:
