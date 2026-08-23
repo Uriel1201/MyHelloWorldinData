@@ -6,6 +6,7 @@
 #   "pyarrow"
 # ]
 # ///
+from pathlib import Path
 from adbc_driver_manager import dbapi
 import oracledb as odb
 import pyarrow as pa
@@ -22,7 +23,7 @@ def get_query(filename: str) -> str:
         with open(filename, "r", encoding="utf-8") as file:
             return file.read()
     except FileNotFoundError:
-        return f"Error:'{filename}' does not exist in directory."
+        raise FileNotFoundError(f"SQL file '{filename}' does not exist.")
 
 
 # ============================================================
@@ -39,7 +40,7 @@ def sqlite_to_arrow(query: str, output_file: str) -> None:
             con.cursor() as cursor,
         ):
             batches = cursor.execute(query).fetch_record_batch()
-            with pa.OSFile(f"{output_rile}.arrow", "wb") as my_file:
+            with pa.OSFile(f"{output_file}.arrow", "wb") as my_file:
                 with pa.ipc.new_file(my_file, batches.schema) as writer:
                     for batch in batches:
                         writer.write_batch(batch)
@@ -48,10 +49,10 @@ def sqlite_to_arrow(query: str, output_file: str) -> None:
 
 
 # ============================================================
-# odb_to_arrow:
+# oracledb_to_arrow:
 # params:
 # ============================================================
-def odb_to_arrow(query: str, output_file: str) -> None:
+def oracledb_to_arrow(query: str, output_file: str) -> None:
     try:
         with odb.connect(
             user=config.ODB_USER, password=config.ODB_PASSWORD, dsn=config.ODB_DSN
@@ -112,10 +113,10 @@ def arrow_to_mysql(arrow_file: str, table_name: str) -> None:
 
 
 # ============================================================
-# csv_to_posql:
+# csv_to_postgresql:
 # params:
 # ============================================================
-def csv_to_posql(path: str, table_name: str, exists: bool) -> None:
+def csv_to_postgresql(path: str, table_name: str, exists: bool) -> None:
     dataset = ds.dataset(path, format="csv")
     reader = dataset.scanner().to_reader()
     try:
@@ -126,10 +127,7 @@ def csv_to_posql(path: str, table_name: str, exists: bool) -> None:
             ) as conn,
             conn.cursor() as cursor,
         ):
-            if exists:
-                first = False
-            else:
-                first = True
+            first = not exists
             for batch in reader:
                 cursor.adbc_ingest(
                     table_name, batch, mode="create" if first else "append"
@@ -147,8 +145,8 @@ def csv_to_posql(path: str, table_name: str, exists: bool) -> None:
 def get_my_table(arrow_file: str) -> config.MyArrowTable:
     with pa.memory_map(arrow_file, "rb") as source:
         return config.MyArrowTable(
-            table=pa.ipc.open_file(source).read_all(),
-            alias=splitext(basename(arrow_file))[0],
+            table = pa.ipc.open_file(source).read_all(),
+            alias = Path(arrow_file).stem,
         )
 
 
@@ -179,12 +177,12 @@ def main():
         """)
     
     sql = get_query("SQL/OLTP/Oracle/odb_01.sql")
-    odb_to_arrow(sql, "USERS_01")
+    oracledb_to_arrow(sql, "USERS_01")
     file = "data/Arrow/USERS_01.arrow"
     arrow_to_mysql(file, "USERS_01")
     csv_to_postgresql("data/csv/01", "USERS_01", False)
     my_table = get_my_table(file)
-    print(f'TABLE NAME:\n{my_table.alias} SCHEMA:\n{mi_table.table.schema}')
+    print(f'TABLE NAME:\n{my_table.alias} SCHEMA:\n{my_table.table.schema}')
 
 
 if __name__ == "__main__":
