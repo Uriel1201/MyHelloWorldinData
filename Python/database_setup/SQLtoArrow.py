@@ -3,7 +3,8 @@
 # dependencies = [
 #   "adbc-driver-manager>=1.9.0",
 #   "oracledb",
-#   "pyarrow"
+#   "pyarrow",
+#   "python-dotenv"
 # ]
 # ///
 from pathlib import Path
