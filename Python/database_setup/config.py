@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from dataclasses import dataclass
 import pyarrow as pa
 
-load_dotenv()
+load_dotenv("env")
 
 URI_POSTGRESQL = os.getenv("URI_POSTGRESQL")
 URI_MYSQL = os.getenv("URI_MYSQL")
