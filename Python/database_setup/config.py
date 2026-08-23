@@ -2,7 +2,6 @@ import os
 from dotenv import load_dotenv
 from dataclasses import dataclass
 import pyarrow as pa
-from pathlib import Path
 
 load_dotenv()
 
