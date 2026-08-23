@@ -10,7 +10,7 @@ URI_MYSQL = os.getenv("URI_MYSQL")
 ODB_DSN = os.getenv("ODB_DSN")
 ODB_USER = os.getenv("ODB_USER")
 ODB_PASSWORD = os.getenv("ODB_PASSWORD")
-DATA_PATH = os.getenv("DATA_PATH", "data/users_01")
+DATA_PATH = os.getenv("DATA_PATH", "data/csv/01")
 
 
 @dataclass
