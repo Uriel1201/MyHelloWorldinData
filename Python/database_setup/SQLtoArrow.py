@@ -152,7 +152,7 @@ def get_my_table(arrow_file: str) -> config.MyArrowTable:
 
 # ============================================================
 def main():
-    mysql_01 = get_query("SQL/OLTP/MySQL/mysql_01_create.sql")
+    mysql_create = get_query("SQL/OLTP/01_mysql_create.sql")
     with (
         dbapi.connect(
             driver="mysql",
@@ -163,7 +163,7 @@ def main():
         cursor.execute(f"""
             DROP TABLE IF EXISTS USERS_01
         """)
-        cursor.execute(mysql_01)
+        cursor.execute(mysql_create)
             
     with (
         dbapi.connect(
@@ -176,7 +176,7 @@ def main():
             DROP TABLE IF EXISTS "USERS_01"
         """)
     
-    sql = get_query("SQL/OLTP/Oracle/odb_01.sql")
+    sql = get_query("SQL/OLTP/01_oracledb.sql")
     oracledb_to_arrow(sql, "USERS_01")
     file = "data/arrow/USERS_01.arrow"
     arrow_to_mysql(file, "USERS_01")
