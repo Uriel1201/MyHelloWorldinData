@@ -40,7 +40,7 @@ def sqlite_to_arrow(query: str, output_file: str) -> None:
             con.cursor() as cursor,
         ):
             batches = cursor.execute(query).fetch_record_batch()
-            with pa.OSFile(f"{output_file}.arrow", "wb") as my_file:
+            with pa.OSFile(f"data/arrow/{output_file}.arrow", "wb") as my_file:
                 with pa.ipc.new_file(my_file, batches.schema) as writer:
                     for batch in batches:
                         writer.write_batch(batch)
@@ -62,7 +62,7 @@ def oracledb_to_arrow(query: str, output_file: str) -> None:
             batch = pa.RecordBatch.from_arrays(
                 first_df.column_arrays(), names=first_df.column_names()
             )
-            with pa.OSFile(f"data/Arrow/{output_file}.arrow", "wb") as my_file:
+            with pa.OSFile(f"data/arrow/{output_file}.arrow", "wb") as my_file:
                 with pa.ipc.new_file(my_file, batch.schema) as writer:
                     writer.write(batch)
                     for df in odf:
@@ -178,9 +178,9 @@ def main():
     
     sql = get_query("SQL/OLTP/Oracle/odb_01.sql")
     oracledb_to_arrow(sql, "USERS_01")
-    file = "data/Arrow/USERS_01.arrow"
+    file = "data/arrow/USERS_01.arrow"
     arrow_to_mysql(file, "USERS_01")
-    csv_to_postgresql("data/csv/01", "USERS_01", False)
+    csv_to_postgresql("data/csv", "USERS_01", False)
     my_table = get_my_table(file)
     print(f'TABLE NAME:\n{my_table.alias} SCHEMA:\n{my_table.table.schema}')
 
