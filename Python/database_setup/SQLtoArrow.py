@@ -61,7 +61,7 @@ def odb_to_arrow(query: str, output_file: str) -> None:
             batch = pa.RecordBatch.from_arrays(
                 first_df.column_arrays(), names=first_df.column_names()
             )
-            with pa.OSFile(f"{output_file}.arrow", "wb") as my_file:
+            with pa.OSFile(f"data/Arrow/{output_file}.arrow", "wb") as my_file:
                 with pa.ipc.new_file(my_file, batch.schema) as writer:
                     writer.write(batch)
                     for df in odf:
@@ -154,9 +154,37 @@ def get_my_table(arrow_file: str) -> config.MyArrowTable:
 
 # ============================================================
 def main():
+    mysql_01 = get_query("SQL/OLTP/MySQL/mysql_01_create.sql")
+    with (
+        dbapi.connect(
+            driver="mysql",
+            db_kwargs={"uri": config.URI_MYSQL,},
+        ) as con,
+        con.cursor() as cursor,
+    ):
+        cursor.execute(f"""
+            DROP TABLE IF EXISTS USERS_01
+        """)
+        cursor.execute(mysql_01)
+            
+    with (
+        dbapi.connect(
+            driver="postgresql",
+            db_kwargs={"uri": config.URI_POSTGRESQL},
+        ) as conn,
+        conn.cursor() as cursor,
+    ):
+        cursor.execute("""
+            DROP TABLE IF EXISTS "USERS_01"
+        """)
+    
     sql = get_query("SQL/OLTP/Oracle/odb_01.sql")
     odb_to_arrow(sql, "USERS_01")
-    csv_to_postgresql(config.DATA_PATH, "USERS_01", exists=False)
+    file = "data/Arrow/USERS_01.arrow"
+    arrow_to_mysql(file, "USERS_01")
+    csv_to_postgresql("data/csv/01", "USERS_01", False)
+    my_table = get_my_table(file)
+    print(f'TABLE NAME:\n{my_table.alias} SCHEMA:\n{mi_table.table.schema}')
 
 
 if __name__ == "__main__":
