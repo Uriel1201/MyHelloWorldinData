@@ -25,56 +25,100 @@ def get_query(filename: str) -> str:
 # sqlite_to_arrow:
 # params:
 # ============================================================
-def sqlite_to_arrow(Query:str, outputNameFile:str) -> None:
+def sqlite_to_arrow(query:str, outputNameFile:str) -> None:
     try:
-        with dbapi.connect("file:/content/MyDataBase.db?mode=ro").cursor() as cursor:
-          
-            cursor.adbc_statement.set_options(
-                **{
-            "adbc.sqlite.query.batch_rows": 10000,
-                }
-            )
-            batches = cursor.execute(Query).fetch_record_batch()
-            with pa.OSFile(f'{outputNameFile}.arrow', 'wb') as my_file:
-                with pa.ipc.new_file(my_file, batches.schema) as writer:
-                    for batch in batches:
-                        writer.write_batch(batch)
-    except Exception as e:
-         print(f'Corrupted query or table not available: {e}')
-        
-# ============================================================
-# oracledb_to_arrow:
-# params:
-# ============================================================
-def oracledb_to_arrow(conn:odb.Connection, query: str, output: str) -> None:
-    try:
-        odf = conn.fetch_df_batches(statement = query, size = 10000)
-        first_df = next(odf)    
-        batch = pa.RecordBatch.from_arrays(first_df.column_arrays(), names = first_df.column_names())
-        with pa.OSFile(f'{output}.arrow', 'wb') as my_file:
-            with pa.ipc.new_file(my_file, batch.schema) as writer:
-                writer.write(batch)
-                for df in odf:
-                    batches = pa.RecordBatch.from_arrays(df.column_arrays(), names = df.column_names())
-                    writer.write_batch(batches)
-    except Exception as e:
-        print(f'Corrupted query or table not available: {e}')
-
-# ============================================================
-# postgresql_to_arrow:
-# params:
-# ============================================================
-def postgresql_to_arrow(conn: dbapi.Connection, query:str, outputNameFile:str) -> None:
-    try:
-        with conn.cursor() as cursor:
+        with (
+            dbapi.connect(driver="sqlite",
+                          db_kwargs={"uri":"file:/content/MyDataBase.db?mode=ro"},
+                  ) as con,
+            con.cursor() as cursor
+        ):
             batches = cursor.execute(query).fetch_record_batch()
             with pa.OSFile(f'{outputNameFile}.arrow', 'wb') as my_file:
                 with pa.ipc.new_file(my_file, batches.schema) as writer:
                     for batch in batches:
                         writer.write_batch(batch)
     except Exception as e:
+         print(f'Corrupted query or table not available: {e}')
+# ============================================================
+# oracledb_to_arrow:
+# params:
+# ============================================================
+def oracledb_to_arrow(query:str, output:str) -> None:
+    try:
+        with (
+            odb.connect(
+                        user=ODB_USER,
+                        password=ODB_PASSWORD,
+                        dsn=ODB_DSN
+                ) as conn
+        ):
+            odf = conn.fetch_df_batches(statement = query, size = 10000)
+            first_df = next(odf)
+            batch = pa.RecordBatch.from_arrays(first_df.column_arrays(), names = first_df.column_names())
+            with pa.OSFile(f'{output}.arrow', 'wb') as my_file:
+                with pa.ipc.new_file(my_file, batch.schema) as writer:
+                    writer.write(batch)
+                    for df in odf:
+                        batches = pa.RecordBatch.from_arrays(df.column_arrays(), names = df.column_names())
+                        writer.write_batch(batches)
+    except Exception as e:
+        print(f'Corrupted query or table not available: {e}')
+# ============================================================
+# arrow_to_mysql:
+# params:
+# ============================================================
+def arrow_to_mysql(arrowFile:str, tableName:str) -> None:
+
+    try:
+        with (
+            dbapi.connect(
+                      driver="mysql",
+                      db_kwargs = {
+                          "uri": URI_MYSQL,}
+                ) as con,
+            con.cursor() as cursor
+        ):
+            with pa.memory_map(arrowFile, 'rb') as source:
+                with pa.ipc.open_file(source) as reader:
+                    event_id=1
+                    for i in range(reader.num_record_batches):
+                        batch=reader.get_batch(i)
+                        ids=pa.array(range(1, event_id+batch.num_rows), type=pa.int64())
+                        event_id+=batch.num_rows
+                        batch = batch.add_column(0,"EVENT_ID", ids)
+                        cursor.adbc_ingest(tableName, batch, mode="append")
+    except Exception as e:
         print(f'Corrupted query or table not available: {e}')
 
+# ============================================================
+# csv_to_postgresql:
+# params:
+# ============================================================
+def csv_to_postgresql(path: str, tableName:str, exists:bool) -> None:
+    dataset = ds.dataset(
+        path,
+        format="csv"
+    )
+    reader = dataset.scanner().to_reader()
+    try:
+        with (
+            dbapi.connect(
+                      driver="postgresql",
+                      db_kwargs={"uri": URI_POSTGRESQL},
+                  ) as conn,
+            conn.cursor() as cursor,
+        ):
+            if exists:
+                first=False
+            else:
+                first=True
+            for batch in reader:
+                cursor.adbc_ingest(tableName, batch, mode="create" if first else "append")
+                first=False
+            conn.commit()
+    except Exception as e:
+        print(f'{e}')
 # ============================================================
 # get_my_arrow_table:
 # params:
