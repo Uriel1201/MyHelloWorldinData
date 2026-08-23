@@ -129,4 +129,15 @@ def get_my_arrow_table(ArrowFile:str) -> config.MyArrowTable:
     with pa.memory_map(ArrowFile, 'rb') as source:
         return config.MyArrowTable(table = pa.ipc.open_file(source).read_all(),
                                    alias = splitext(basename(ArrowFile))[0]
+            
                       )
+# ============================================================
+def main():
+    csv_to_postgresql(
+        config.DATA_PATH,
+        "USERS_01",
+        exists=False
+    )
+
+if __name__ == "__main__":
+    main()
