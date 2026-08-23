@@ -86,7 +86,7 @@ def arrow_to_mysql(arrowFile:str, tableName:str) -> None:
                     event_id=1
                     for i in range(reader.num_record_batches):
                         batch=reader.get_batch(i)
-                        ids=pa.array(range(1, event_id+batch.num_rows), type=pa.int64())
+                        ids=pa.array(range(event_id, event_id+batch.num_rows), type=pa.int64())
                         event_id+=batch.num_rows
                         batch = batch.add_column(0,"EVENT_ID", ids)
                         cursor.adbc_ingest(tableName, batch, mode="append")
