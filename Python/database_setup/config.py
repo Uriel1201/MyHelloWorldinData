@@ -4,8 +4,7 @@ from dataclasses import dataclass
 import pyarrow as pa
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-load_dotenv(ROOT / "env")
+load_dotenv()
 
 URI_POSTGRESQL = os.getenv("URI_POSTGRESQL")
 URI_MYSQL = os.getenv("URI_MYSQL")
