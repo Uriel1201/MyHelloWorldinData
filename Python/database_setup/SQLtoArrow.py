@@ -81,13 +81,19 @@ def arrow_to_mysql(arrowFile:str, tableName:str) -> None:
                 ) as con,
             con.cursor() as cursor
         ):
+            cursor.execute("""
+                SELECT 
+                    COALESCE (MAX(EVENT_ID),1)
+                FROM
+                    USERS_01
+                """)
+            last_event=cursor.fetchone()[0]
             with pa.memory_map(arrowFile, 'rb') as source:
                 with pa.ipc.open_file(source) as reader:
-                    event_id=1
                     for i in range(reader.num_record_batches):
                         batch=reader.get_batch(i)
-                        ids=pa.array(range(event_id, event_id+batch.num_rows), type=pa.int64())
-                        event_id+=batch.num_rows
+                        ids=pa.array(range(last_event, last_event+batch.num_rows), type=pa.int64())
+                        last_event+=batch.num_rows
                         batch = batch.add_column(0,"EVENT_ID", ids)
                         cursor.adbc_ingest(tableName, batch, mode="append")
     except Exception as e:
