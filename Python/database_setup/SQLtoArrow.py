@@ -6,7 +6,6 @@
 #   "pyarrow"
 # ]
 # ///
-jgkfkkfkfkrnbfbcbbfbfncbk
 from adbc_driver_manager import dbapi
 import oracledb as odb
 import pyarrow as pa
