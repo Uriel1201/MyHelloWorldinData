@@ -50,9 +50,9 @@ def oracledb_to_arrow(query:str, output:str) -> None:
     try:
         with (
             odb.connect(
-                        user=ODB_USER,
-                        password=ODB_PASSWORD,
-                        dsn=ODB_DSN
+                        user=config.ODB_USER,
+                        password=config.ODB_PASSWORD,
+                        dsn=config.ODB_DSN
                 ) as conn
         ):
             odf = conn.fetch_df_batches(statement = query, size = 10000)
@@ -77,7 +77,7 @@ def arrow_to_mysql(arrowFile:str, table_name:str) -> None:
             dbapi.connect(
                       driver="mysql",
                       db_kwargs = {
-                          "uri": URI_MYSQL,}
+                          "uri": config.URI_MYSQL,}
                 ) as con,
             con.cursor() as cursor
         ):
@@ -113,7 +113,7 @@ def csv_to_postgresql(path: str, tableName:str, exists:bool) -> None:
         with (
             dbapi.connect(
                       driver="postgresql",
-                      db_kwargs={"uri": URI_POSTGRESQL},
+                      db_kwargs={"uri": config.URI_POSTGRESQL},
                   ) as conn,
             conn.cursor() as cursor,
         ):
