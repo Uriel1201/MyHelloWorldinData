@@ -83,7 +83,7 @@ def arrow_to_mysql(arrowFile:str, tableName:str) -> None:
         ):
             cursor.execute("""
                 SELECT 
-                    COALESCE (MAX(EVENT_ID),1)
+                    COALESCE (MAX(EVENT_ID),0)
                 FROM
                     USERS_01
                 """)
@@ -92,7 +92,7 @@ def arrow_to_mysql(arrowFile:str, tableName:str) -> None:
                 with pa.ipc.open_file(source) as reader:
                     for i in range(reader.num_record_batches):
                         batch=reader.get_batch(i)
-                        ids=pa.array(range(last_event, last_event+batch.num_rows), type=pa.int64())
+                        ids=pa.array(range(last_event+1, last_event+1+batch.num_rows), type=pa.int64())
                         last_event+=batch.num_rows
                         batch = batch.add_column(0,"EVENT_ID", ids)
                         cursor.adbc_ingest(tableName, batch, mode="append")
