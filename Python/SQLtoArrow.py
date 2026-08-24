@@ -3,8 +3,7 @@
 # dependencies = [
 #   "adbc-driver-manager>=1.9.0",
 #   "oracledb",
-#   "pyarrow",
-#   "python-dotenv"
+#   "pyarrow"
 # ]
 # ///
 from pathlib import Path
@@ -41,12 +40,15 @@ def sqlite_to_arrow(query: str, output_file: str) -> None:
             con.cursor() as cursor,
         ):
             batches = cursor.execute(query).fetch_record_batch()
-            with pa.OSFile(f"data/arrow/{output_file}.arrow", "wb") as my_file:
-                with pa.ipc.new_file(my_file, batches.schema) as writer:
-                    for batch in batches:
-                        writer.write_batch(batch)
+            with (
+                pa.OSFile(f"data/arrow/{output_file}.arrow", "wb") as my_file,
+                pa.ipc.new_file(my_file, batches.schema) as writer,
+            ):
+                for batch in batches:
+                    writer.write_batch(batch)
     except Exception as e:
-        print(f"Corrupted query or table not available: {e}")
+        print(f"DATABASE OPERATION FAILED: {e}")
+        raise
 
 
 # ============================================================
