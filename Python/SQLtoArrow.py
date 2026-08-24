@@ -191,11 +191,14 @@ def main():
     
     sql = get_query("SQL/OLTP/01_oracledb.sql")
     oracledb_to_arrow(sql, "USERS_01")
+    print("\nARROW FILE USERS_01 LOADED IN data/arrow")
     file = "data/arrow/USERS_01.arrow"
     arrow_to_mysql(file, "USERS_01")
+    print("\nARROW FILE USERS_01 LOADED IN MYSQL DB")
     csv_to_postgresql("data/csv", "USERS_01", False)
+    print("n\CSV FILES LOADED IN POSTGRESQL DB")
     my_table = get_my_table(file)
-    print(f'TABLE NAME:\n{my_table.alias} SCHEMA:\n{my_table.table.schema}')
+    print(f'\nA TABLE NAMED -> {my_table.alias}\nWITH SCHEMA -> {my_table.table.schema}')
 
 
 if __name__ == "__main__":
