@@ -176,6 +176,7 @@ def main():
         cursor.execute("""
             DROP TABLE IF EXISTS "USERS_01"
         """)
+        conn.commit()
     
     sql = get_query("SQL/OLTP/01_oracledb.sql")
     oracledb_to_arrow(sql, "USERS_01")
