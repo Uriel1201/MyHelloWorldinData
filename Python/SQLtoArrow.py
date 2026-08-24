@@ -3,7 +3,7 @@
 # dependencies = [
 #   "adbc-driver-manager>=1.9.0",
 #   "oracledb",
-#   "pyarrow"
+#   "pyarrow",
 # ]
 # ///
 from pathlib import Path
@@ -65,16 +65,19 @@ def oracledb_to_arrow(query: str, output_file: str) -> None:
             batch = pa.RecordBatch.from_arrays(
                 first_df.column_arrays(), names=first_df.column_names()
             )
-            with pa.OSFile(f"data/arrow/{output_file}.arrow", "wb") as my_file:
-                with pa.ipc.new_file(my_file, batch.schema) as writer:
-                    writer.write(batch)
-                    for df in odf:
-                        batches = pa.RecordBatch.from_arrays(
-                            df.column_arrays(), names=df.column_names()
-                        )
-                        writer.write_batch(batches)
+            with (
+                pa.OSFile(f"data/arrow/{output_file}.arrow", "wb") as my_file,
+                pa.ipc.new_file(my_file, batch.schema) as writer,
+            ):
+                writer.write(batch)
+                for df in odf:
+                    batches = pa.RecordBatch.from_arrays(
+                                  df.column_arrays(), names=df.column_names()
+                    )
+                    writer.write_batch(batches)
     except Exception as e:
-        print(f"Corrupted query or table not available: {e}")
+        print(f"DATABASE OPERATION FAILED: {e}")
+        raise
 
 
 # ============================================================
@@ -100,19 +103,22 @@ def arrow_to_mysql(arrow_file: str, table_name: str) -> None:
                     {table_name}
                 """)
             last_event = cursor.fetchone()[0]
-            with pa.memory_map(arrow_file, "rb") as source:
-                with pa.ipc.open_file(source) as reader:
-                    for i in range(reader.num_record_batches):
-                        batch = reader.get_batch(i)
-                        ids = pa.array(
-                            range(last_event + 1, last_event + 1 + batch.num_rows),
-                            type=pa.int64(),
-                        )
-                        last_event += batch.num_rows
-                        batch = batch.add_column(0, "EVENT_ID", ids)
-                        cursor.adbc_ingest(table_name, batch, mode="append")
+            with (
+                pa.memory_map(arrow_file, "rb") as source,
+                pa.ipc.open_file(source) as reader,
+            ):
+                for i in range(reader.num_record_batches):
+                    batch = reader.get_batch(i)
+                    ids = pa.array(
+                        range(last_event + 1, last_event + 1 + batch.num_rows),
+                        type=pa.int64(),
+                    )
+                    last_event += batch.num_rows
+                    batch = batch.add_column(0, "EVENT_ID", ids)
+                    cursor.adbc_ingest(table_name, batch, mode="append")
     except Exception as e:
-        print(f"Corrupted query or table not available: {e}")
+        print(f"DATABASE OPERATION FAILED: {e}")
+        raise
 
 
 # ============================================================
@@ -139,6 +145,7 @@ def csv_to_postgresql(path: str, table_name: str, exists: bool) -> None:
             conn.commit()
     except Exception as e:
         print(f"{e}")
+        raise
 
 
 # ============================================================
